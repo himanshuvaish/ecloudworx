@@ -1,0 +1,42 @@
+{
+  "name": "ecloudworx-frontend",
+  "version": "1.0.0",
+  "description": "Multi-cloud management platform frontend for eCloudWorx",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "start": "python -m http.server 8000",
+    "build": "echo 'No build process needed for static files'",
+    "docker:build": "docker build -t ecloudworx-frontend .",
+    "docker:run": "docker run -p 3000:80 ecloudworx-frontend",
+    "docker:dev": "docker-compose --profile dev up",
+    "docker:prod": "docker-compose up --build",
+    "deploy:netlify": "npx netlify deploy --prod --dir=.",
+    "deploy:vercel": "npx vercel --prod"
+  },
+  "keywords": [
+    "cloud",
+    "aws", 
+    "azure",
+    "gcp",
+    "multi-cloud",
+    "dashboard",
+    "automation",
+    "devops"
+  ],
+  "author": "eCloudWorx Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ecloudworx/frontend"
+  },
+  "homepage": "https://ecloudworx.com",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "files": [
+    "index.html",
+    "style.css", 
+    "app.js"
+  ]
+}

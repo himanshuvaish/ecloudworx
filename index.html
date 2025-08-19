@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eCloudWorx - Your cloud, simplified</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="nav__brand">
+                    <span class="nav__logo">☁️</span>
+                    <span class="nav__title">eCloudWorx</span>
+                </div>
+                <ul class="nav__menu">
+                    <li><a href="#features" class="nav__link">Features</a></li>
+                    <li><a href="#pricing" class="nav__link">Pricing</a></li>
+                    <li><a href="#resources" class="nav__link">Resources</a></li>
+                    <li><a href="#" class="nav__link">Login</a></li>
+                    <li><a href="#" class="btn btn--primary btn--sm">Sign Up</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero__content">
+                <h1 class="hero__title">Your cloud, simplified.</h1>
+                <p class="hero__subtitle">eCloudWorx helps you see, manage, and automate all your cloud resources across AWS, Azure, and Google Cloud — without needing to be a certified expert.</p>
+                <div class="hero__actions">
+                    <a href="#" class="btn btn--primary btn--lg">Start Free Trial</a>
+                    <a href="#" class="btn btn--outline btn--lg">Watch Demo</a>
+                </div>
+            </div>
+            <div class="hero__visual">
+                <div class="dashboard-preview">
+                    <div class="dashboard-preview__header">
+                        <h3>Multi-Cloud Dashboard</h3>
+                        <span class="live-indicator">🟢 Live</span>
+                    </div>
+                    <div class="mini-stats">
+                        <div class="mini-stat">
+                            <span class="mini-stat__value">247</span>
+                            <span class="mini-stat__label">Total Resources</span>
+                        </div>
+                        <div class="mini-stat">
+                            <span class="mini-stat__value">$1,247</span>
+                            <span class="mini-stat__label">Monthly Cost</span>
+                        </div>
+                        <div class="mini-stat">
+                            <span class="mini-stat__value">3</span>
+                            <span class="mini-stat__label">Cloud Providers</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section class="dashboard-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section__title">Unified Multi-Cloud View</h2>
+                <p class="section__subtitle">See all your resources from AWS, Azure, and GCP in one clean interface</p>
+            </div>
+
+            <div class="dashboard">
+                <div class="dashboard__tabs">
+                    <button class="dashboard__tab active" data-provider="aws">
+                        <span class="provider-icon">🟠</span>
+                        AWS
+                    </button>
+                    <button class="dashboard__tab" data-provider="azure">
+                        <span class="provider-icon">🔵</span>
+                        Azure
+                    </button>
+                    <button class="dashboard__tab" data-provider="gcp">
+                        <span class="provider-icon">🔴</span>
+                        Google Cloud
+                    </button>
+                </div>
+
+                <div class="dashboard__search">
+                    <input type="text" placeholder="Search resources..." class="search-input">
+                    <button class="filter-btn">🔍</button>
+                </div>
+
+                <!-- AWS Panel -->
+                <div id="aws-panel" class="provider-panel active">
+                    <div class="resource-grid">
+                        <div class="resource-card">
+                            <div class="resource-card__header">
+                                <h4>EC2 Instance</h4>
+                                <span class="status-badge status--running">Running</span>
+                            </div>
+                            <div class="resource-card__content">
+                                <p class="resource-name">web-server-01</p>
+                                <div class="resource-details">
+                                    <span>t3.medium • us-east-1</span>
+                                    <span class="cost">$45.20/month</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="resource-card">
+                            <div class="resource-card__header">
+                                <h4>S3 Bucket</h4>
+                                <span class="status-badge status--active">Active</span>
+                            </div>
+                            <div class="resource-card__content">
+                                <p class="resource-name">my-app-storage</p>
+                                <div class="resource-details">
+                                    <span>250GB • us-east-1</span>
+                                    <span class="cost">$5.50/month</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="resource-card">
+                            <div class="resource-card__header">
+                                <h4>RDS Database</h4>
+                                <span class="status-badge status--available">Available</span>
+                            </div>
+                            <div class="resource-card__content">
+                                <p class="resource-name">production-db</p>
+                                <div class="resource-details">
+                                    <span>MySQL 8.0 • us-east-1</span>
+                                    <span class="cost">$80.15/month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Azure Panel -->
+                <div id="azure-panel" class="provider-panel">
+                    <div class="resource-grid">
+                        <div class="resource-card">
+                            <div class="resource-card__header">
+                                <h4>Virtual Machine</h4>
+                                <span class="status-badge status--running">Running</span>
+                            </div>
+                            <div class="resource-card__content">
+                                <p class="resource-name">app-server-vm</p>
+                                <div class="resource-details">
+                                    <span>Standard_B2s • East US</span>
+                                    <span class="cost">$55.40/month</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="resource-card">
+                            <div class="resource-card__header">
+                                <h4>Storage Account</h4>
+                                <span class="status-badge status--active">Active</span>
+                            </div>
+                            <div class="resource-card__content">
+                                <p class="resource-name">appdata-storage</p>
+                                <div class="resource-details">
+                                    <span>180GB • East US</span>
+                                    <span class="cost">$4.20/month</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="resource-card">
+                            <div class="resource-card__header">
+                                <h4>SQL Database</h4>
+                                <span class="status-badge status--online">Online</span>
+                            </div>
+                            <div class="resource-card__content">
+                                <p class="resource-name">customer-db</p>
+                                <div class="resource-details">
+                                    <span>SQL Server • East US</span>
+                                    <span class="cost">$70.25/month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GCP Panel -->
+                <div id="gcp-panel" class="provider-panel">
+                    <div class="resource-grid">
+                        <div class="resource-card">
+                            <div class="resource-card__header">
+                                <h4>Compute Instance</h4>
+                                <span class="status-badge status--running">Running</span>
+                            </div>
+                            <div class="resource-card__content">
+                                <p class="resource-name">analytics-worker</p>
+                                <div class="resource-details">
+                                    <span>n1-standard-2 • us-central1</span>
+                                    <span class="cost">$60.80/month</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="resource-card">
+                            <div class="resource-card__header">
+                                <h4>Cloud Storage</h4>
+                                <span class="status-badge status--active">Active</span>
+                            </div>
+                            <div class="resource-card__content">
+                                <p class="resource-name">backup-bucket</p>
+                                <div class="resource-details">
+                                    <span>320GB • us-central1</span>
+                                    <span class="cost">$7.50/month</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="resource-card">
+                            <div class="resource-card__header">
+                                <h4>Cloud SQL</h4>
+                                <span class="status-badge status--runnable">Runnable</span>
+                            </div>
+                            <div class="resource-card__content">
+                                <p class="resource-name">analytics-db</p>
+                                <div class="resource-details">
+                                    <span>PostgreSQL 14 • us-central1</span>
+                                    <span class="cost">$65.30/month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section__title">Why Choose eCloudWorx?</h2>
+                <p class="section__subtitle">Powerful features designed for teams of all sizes</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-card__icon">🔍</div>
+                    <h3 class="feature-card__title">Unified View</h3>
+                    <p class="feature-card__description">See all your cloud resources from AWS, Azure, and GCP in one clean dashboard</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-card__icon">⚡</div>
+                    <h3 class="feature-card__title">Smart Automation</h3>
+                    <p class="feature-card__description">Deploy proven automation templates without writing code</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-card__icon">💰</div>
+                    <h3 class="feature-card__title">Cost Optimization</h3>
+                    <p class="feature-card__description">Identify idle resources and optimize spending automatically</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-card__icon">🎓</div>
+                    <h3 class="feature-card__title">No Certification Needed</h3>
+                    <p class="feature-card__description">Manage clouds like an expert without expensive certifications</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Automation Library -->
+    <section class="automation-library">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section__title">Automation Library</h2>
+                <p class="section__subtitle">Pre-built templates for common cloud management tasks</p>
+            </div>
+
+            <div class="automation-filters">
+                <button class="filter-btn active" data-category="all">All</button>
+                <button class="filter-btn" data-category="cost">Cost Optimization</button>
+                <button class="filter-btn" data-category="security">Security</button>
+                <button class="filter-btn" data-category="backup">Backup</button>
+                <button class="filter-btn" data-category="performance">Performance</button>
+            </div>
+
+            <div class="automation-grid">
+                <div class="automation-card" data-category="cost">
+                    <div class="automation-card__header">
+                        <h4>Stop Idle EC2 Instances</h4>
+                        <span class="difficulty-badge difficulty--easy">Easy</span>
+                    </div>
+                    <p class="automation-card__description">Automatically detect and stop unused instances to save costs</p>
+                    <div class="automation-card__footer">
+                        <span class="savings">Up to 40% savings</span>
+                        <button class="btn btn--sm btn--outline">Deploy</button>
+                    </div>
+                </div>
+
+                <div class="automation-card" data-category="security">
+                    <div class="automation-card__header">
+                        <h4>S3 Bucket Security Audit</h4>
+                        <span class="difficulty-badge difficulty--easy">Easy</span>
+                    </div>
+                    <p class="automation-card__description">Check for public buckets and apply security best practices</p>
+                    <div class="automation-card__footer">
+                        <span class="savings">Security Risk Reduction</span>
+                        <button class="btn btn--sm btn--outline">Deploy</button>
+                    </div>
+                </div>
+
+                <div class="automation-card" data-category="backup">
+                    <div class="automation-card__header">
+                        <h4>Cross-Cloud Backup Setup</h4>
+                        <span class="difficulty-badge difficulty--medium">Medium</span>
+                    </div>
+                    <p class="automation-card__description">Automated backup strategy across multiple cloud providers</p>
+                    <div class="automation-card__footer">
+                        <span class="savings">Data Protection</span>
+                        <button class="btn btn--sm btn--outline">Deploy</button>
+                    </div>
+                </div>
+
+                <div class="automation-card" data-category="cost">
+                    <div class="automation-card__header">
+                        <h4>Cost Alert Automation</h4>
+                        <span class="difficulty-badge difficulty--easy">Easy</span>
+                    </div>
+                    <p class="automation-card__description">Get notified when spending exceeds your threshold</p>
+                    <div class="automation-card__footer">
+                        <span class="savings">Budget Control</span>
+                        <button class="btn btn--sm btn--outline">Deploy</button>
+                    </div>
+                </div>
+
+                <div class="automation-card" data-category="security">
+                    <div class="automation-card__header">
+                        <h4>Security Group Hardening</h4>
+                        <span class="difficulty-badge difficulty--medium">Medium</span>
+                    </div>
+                    <p class="automation-card__description">Apply security best practices to firewall rules</p>
+                    <div class="automation-card__footer">
+                        <span class="savings">Security Enhancement</span>
+                        <button class="btn btn--sm btn--outline">Deploy</button>
+                    </div>
+                </div>
+
+                <div class="automation-card" data-category="performance">
+                    <div class="automation-card__header">
+                        <h4>Auto-scaling Configuration</h4>
+                        <span class="difficulty-badge difficulty--advanced">Advanced</span>
+                    </div>
+                    <p class="automation-card__description">Set up intelligent auto-scaling based on demand</p>
+                    <div class="automation-card__footer">
+                        <span class="savings">Cost + Performance</span>
+                        <button class="btn btn--sm btn--outline">Deploy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section__title">Before vs After eCloudWorx</h2>
+            </div>
+
+            <div class="comparison">
+                <div class="comparison__side comparison__before">
+                    <h3>Before eCloudWorx</h3>
+                    <ul class="comparison__list">
+                        <li>❌ Jumping between 3 different cloud consoles</li>
+                        <li>❌ Need certified cloud experts ($100k+ salaries)</li>
+                        <li>❌ Manual resource management and monitoring</li>
+                        <li>❌ Wasted spending on idle resources</li>
+                        <li>❌ Security vulnerabilities go unnoticed</li>
+                    </ul>
+                </div>
+
+                <div class="comparison__side comparison__after">
+                    <h3>After eCloudWorx</h3>
+                    <ul class="comparison__list">
+                        <li>✅ Single dashboard for all cloud providers</li>
+                        <li>✅ Any team member can manage clouds confidently</li>
+                        <li>✅ Automated resource optimization</li>
+                        <li>✅ Save 40% on cloud costs with smart automation</li>
+                        <li>✅ Proactive security monitoring and fixes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card__value">10,000+</div>
+                    <div class="stat-card__label">Resources Managed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__value">40%</div>
+                    <div class="stat-card__label">Average Cost Savings</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__value">500+</div>
+                    <div class="stat-card__label">Happy Customers</div>
+                </div>
+            </div>
+
+            <div class="testimonial">
+                <blockquote>"eCloudWorx saved us from hiring a $120k cloud architect. Now our junior developers manage our entire multi-cloud infrastructure with confidence."</blockquote>
+                <cite>— Sarah Chen, CTO at TechStart Inc.</cite>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section__title">Simple, Transparent Pricing</h2>
+                <p class="section__subtitle">Choose the plan that fits your team size and needs</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-card__header">
+                        <h3>Free</h3>
+                        <div class="pricing-card__price">
+                            <span class="currency">$</span>
+                            <span class="amount">0</span>
+                            <span class="period">forever</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-card__features">
+                        <li>1 cloud provider</li>
+                        <li>Basic dashboard</li>
+                        <li>5 automations</li>
+                        <li>Community support</li>
+                    </ul>
+                    <button class="btn btn--outline btn--full">Get Started</button>
+                </div>
+
+                <div class="pricing-card pricing-card--featured">
+                    <div class="pricing-card__badge">Most Popular</div>
+                    <div class="pricing-card__header">
+                        <h3>Pro</h3>
+                        <div class="pricing-card__price">
+                            <span class="currency">$</span>
+                            <span class="amount">49</span>
+                            <span class="period">per month</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-card__features">
+                        <li>All cloud providers</li>
+                        <li>Advanced dashboard</li>
+                        <li>Unlimited automations</li>
+                        <li>Priority support</li>
+                        <li>Custom templates</li>
+                    </ul>
+                    <button class="btn btn--primary btn--full">Start Free Trial</button>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-card__header">
+                        <h3>Enterprise</h3>
+                        <div class="pricing-card__price">
+                            <span class="amount">Custom</span>
+                            <span class="period">contact us</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-card__features">
+                        <li>Everything in Pro</li>
+                        <li>Custom automation development</li>
+                        <li>Dedicated support</li>
+                        <li>SLA guarantee</li>
+                        <li>On-premise deployment</li>
+                    </ul>
+                    <button class="btn btn--outline btn--full">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__section">
+                    <div class="footer__brand">
+                        <span class="footer__logo">☁️</span>
+                        <span class="footer__title">eCloudWorx</span>
+                    </div>
+                    <p class="footer__description">Your cloud, simplified.</p>
+                </div>
+
+                <div class="footer__section">
+                    <h4>Product</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Automation Library</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">API Docs</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__section">
+                    <h4>Company</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__section">
+                    <h4>Support</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Status</a></li>
+                        <li><a href="#">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p>&copy; 2025 eCloudWorx. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
