@@ -1,0 +1,94 @@
+/* Section wrapper */
+.socialproof {
+  width: 100%;
+  padding: 48px 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+}
+
+/* Constrain width */
+.socialproof__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+/* Grid of KPIs */
+.socialproof__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 700px) {
+  .socialproof__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0; /* we’ll use separators on desktop */
+  }
+}
+
+/* KPI item */
+.socialproof__item {
+  position: relative;
+  padding: 20px 24px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;          /* gray-200 */
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(16,24,40,0.04);
+}
+
+/* Vertical separators only on desktop for the middle boundaries */
+@media (min-width: 700px) {
+  .socialproof__item {
+    border-radius: 0;               /* unified strip look */
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .socialproof__item:first-child {
+    border-left: 1px solid #e5e7eb;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+  }
+  .socialproof__item:last-child {
+    border-right: 1px solid #e5e7eb;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+  }
+  .socialproof__item + .socialproof__item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 16px;
+    bottom: 16px;
+    width: 1px;
+    background: #e5e7eb;            /* subtle vertical divider */
+  }
+}
+
+/* Numbers */
+.socialproof__value {
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #111827;                     /* gray-900 */
+}
+
+/* Labels */
+.socialproof__label {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #6b7280;                     /* gray-500 */
+}
+
+/* Slight hover lift (desktop only) */
+@media (hover: hover) and (pointer: fine) {
+  .socialproof__item {
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .socialproof__item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(16,24,40,0.08);
+  }
+}

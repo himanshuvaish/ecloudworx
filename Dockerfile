@@ -1,15 +1,30 @@
-FROM nginx:alpine
+# ---- Build stage: create optimized static assets ----
+FROM node:20-alpine AS build
+WORKDIR /app
 
-# Copy static files to nginx html directory  
-COPY index.html /usr/share/nginx/html/
-COPY style.css /usr/share/nginx/html/
-COPY app.js /usr/share/nginx/html/
+COPY package*.json ./
+RUN npm ci
 
-# Copy custom nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY . .
+RUN npm run build
 
-# Expose port 80
-EXPOSE 80
+# ---- Runtime stage: Nginx serves /dist ----
+FROM nginx:alpine AS runtime
+WORKDIR /app
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# envsubst for dynamic $PORT at runtime
+RUN apk add --no-cache bash gettext
+
+# Copy built assets
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy templated nginx config and entrypoint
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Cloud Run will set $PORT; default to 8080 locally
+ENV PORT=8080
+EXPOSE 8080
+
+CMD ["/docker-entrypoint.sh"]

@@ -1,0 +1,78 @@
+.automation-library {
+  padding: var(--space-24) 0;
+  background: var(--color-white);
+}
+
+.automation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-6);
+}
+
+.automation-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  transition: all 0.2s;
+}
+
+.automation-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.automation-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.automation-card__header h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+
+.difficulty-badge {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.difficulty--easy {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+}
+
+.difficulty--medium {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--color-warning);
+}
+
+.automation-card__description {
+  color: var(--color-gray-600);
+  margin-bottom: var(--space-4);
+  line-height: 1.6;
+}
+
+.automation-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.savings {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .automation-grid {
+    grid-template-columns: 1fr;
+  }
+}

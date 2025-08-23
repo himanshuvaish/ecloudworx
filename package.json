@@ -1,42 +1,33 @@
 {
-  "name": "ecloudworx-frontend",
+  "name": "ecloudworx-react-clean",
   "version": "1.0.0",
-  "description": "Multi-cloud management platform frontend for eCloudWorx",
-  "main": "index.html",
+  "description": "Clean React replica of eCloudWorx - minimal dependencies, zero conflicts",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "lucide-react": "^0.541.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-intersection-observer": "^9.13.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.0"
+  },
   "scripts": {
-    "dev": "python -m http.server 8000",
-    "start": "python -m http.server 8000",
-    "build": "echo 'No build process needed for static files'",
-    "docker:build": "docker build -t ecloudworx-frontend .",
-    "docker:run": "docker run -p 3000:80 ecloudworx-frontend",
-    "docker:dev": "docker-compose --profile dev up",
-    "docker:prod": "docker-compose up --build",
-    "deploy:netlify": "npx netlify deploy --prod --dir=.",
-    "deploy:vercel": "npx vercel --prod"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "keywords": [
+    "react",
+    "vite",
     "cloud",
-    "aws", 
+    "aws",
     "azure",
     "gcp",
-    "multi-cloud",
-    "dashboard",
-    "automation",
-    "devops"
+    "dashboard"
   ],
   "author": "eCloudWorx Team",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ecloudworx/frontend"
-  },
-  "homepage": "https://ecloudworx.com",
-  "devDependencies": {
-    "http-server": "^14.1.1"
-  },
-  "files": [
-    "index.html",
-    "style.css", 
-    "app.js"
-  ]
+  "license": "MIT"
 }

@@ -1,0 +1,36 @@
+/* Base reveal (fade + slide up stronger) */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);      /* was 14px */
+  transition: opacity .8s ease, transform .8s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered children — bigger slide + slightly longer */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(32px);      /* was 12px */
+  transition: opacity .8s ease, transform .8s ease;
+}
+.reveal-stagger.is-visible > * { opacity: 1; transform: translateY(0); }
+.reveal-stagger.is-visible > *:nth-child(1) { transition-delay: .1s; }
+.reveal-stagger.is-visible > *:nth-child(2) { transition-delay: .25s; }
+.reveal-stagger.is-visible > *:nth-child(3) { transition-delay: .4s; }
+.reveal-stagger.is-visible > *:nth-child(4) { transition-delay: .55s; }
+.reveal-stagger.is-visible > *:nth-child(5) { transition-delay: .7s; }
+.reveal-stagger.is-visible > *:nth-child(6) { transition-delay: .85s; }
+
+/* Hover lift — more pronounced */
+.lift {
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.lift:hover {
+  transform: translateY(-6px);      /* was -2px */
+  box-shadow: 0 12px 28px rgba(16,24,40,0.15);
+}
+
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }

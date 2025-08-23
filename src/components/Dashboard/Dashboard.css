@@ -1,0 +1,124 @@
+.dashboard-section {
+  padding: var(--space-24) 0;
+  background: var(--color-white);
+}
+
+.dashboard {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-gray-200);
+  overflow: hidden;
+}
+
+.dashboard__tabs {
+  display: flex;
+  background: var(--color-gray-50);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.dashboard__tab {
+  flex: 1;
+  padding: var(--space-4) var(--space-6);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-weight: 500;
+  color: var(--color-gray-600);
+  transition: all 0.2s;
+}
+
+.dashboard__tab:hover {
+  background: var(--color-gray-100);
+}
+
+.dashboard__tab.active {
+  background: var(--color-white);
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.provider-icon {
+  font-size: 1.25rem;
+}
+
+.dashboard__search {
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.provider-panel {
+  padding: var(--space-6);
+}
+
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-6);
+}
+
+.resource-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  transition: all 0.2s;
+}
+
+.resource-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.resource-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.resource-card__header h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-gray-700);
+}
+
+.resource-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-gray-900);
+  margin-bottom: var(--space-2);
+}
+
+.resource-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--color-gray-500);
+}
+
+.cost {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.no-results {
+  text-align: center;
+  padding: var(--space-8);
+  color: var(--color-gray-500);
+}
+
+@media (max-width: 768px) {
+  .dashboard__tabs {
+    flex-direction: column;
+  }
+
+  .resource-grid {
+    grid-template-columns: 1fr;
+  }
+}
