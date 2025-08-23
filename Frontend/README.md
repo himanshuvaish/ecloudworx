@@ -198,6 +198,13 @@ gcloud run deploy ecloudworx-web \
 
 ## 🔧 Updating Workflow
 
+- **Header**
+  - Sticky nav bar, highlights on scroll.
+  - Displays brand (“☁️ eCloudWorx”) larger than nav links.
+  - Navigation links include Features, Pricing, Resources, Signup, and ecloudWorx University (accent style).
+  - Styles: `Header.css` (font sizes, spacing, accent coloring, sticky behavior).
+
+
 When you want to update a section:
 
 1. **Find the component folder** in `src/components/`.
