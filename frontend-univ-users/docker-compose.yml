@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: ecloudworx_frontend_dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - /app/node_modules  # Anonymous volume for node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_API_URL=http://localhost:4000/api
+    stdin_open: true
+    tty: true
+
+  frontend-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecloudworx_frontend_prod
+    ports:
+      - "80:80"
+    environment:
+      - REACT_APP_API_URL=http://localhost:4000/api
