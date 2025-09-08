@@ -1,0 +1,40 @@
+version: '3.8'
+# services:
+#   auth-service:
+#     build:
+#       context: ./auth-service
+#       dockerfile: Dockerfile
+#     ports:
+#       - "7100:7100"
+#     volumes:
+#       - ./auth-service:/app
+#     restart: unless-stopped
+
+#   frontend:
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
+#     ports:
+#       - "8000:80"
+#     depends_on:
+#       - auth-service
+#     restart: unless-stopped
+
+services:
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "7100:7100"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - auth-service
+    restart: unless-stopped
