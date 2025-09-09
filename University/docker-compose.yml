@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # set this to your Strapi address (use host.docker.internal if Strapi runs on host)
+        VITE_STRAPI_URL: "http://host.docker.internal:7200"
+    image: ecloud-univ:latest
+    ports:
+      - "4000:80"   # host:container -> open http://localhost:4000
+    restart: unless-stopped
+    environment:
+      # these envs are not used by the static build at runtime, but you can keep for documentation
+      - VITE_STRAPI_URL=http://host.docker.internal:7200
+    # if you run strapi as another service in the same compose, uncomment and adjust:
+    # depends_on:
+    #   - strapi
