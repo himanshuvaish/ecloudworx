@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    ...
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- Runtime env placeholder. Docker entrypoint will replace $UNIVERSITY_URL via envsubst.
+         For local dev (vite) use .env VITE_UNIVERSITY_URL. -->
+    <script>
+      // Note: `$UNIVERSITY_URL` will be substituted at container startup by docker-entrypoint.sh
+      // If left as literal, navigation.js will fall back to import.meta.env.VITE_UNIVERSITY_URL or '#university'.
+      window.__ENV__ = {
+        UNIVERSITY_URL: "$UNIVERSITY_URL"
+      };
+    </script>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

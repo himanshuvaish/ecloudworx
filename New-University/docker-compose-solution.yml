@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  # Nginx reverse proxy - ONLY this is exposed to internet
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    container_name: ecloudworx-nginx
+    ports:
+      - "80:80"  # Only port exposed to internet
+    depends_on:
+      - strapi
+    restart: unless-stopped
+    networks:
+      - internal
+    volumes:
+      - ./logs/nginx:/var/log/nginx
+
+  # Strapi backend - INTERNAL ONLY, not exposed to internet
+  strapi:
+    build: 
+      context: ./strapi
+      dockerfile: Dockerfile
+    container_name: ecloudworx-strapi
+    expose:
+      - "7200"  # Only accessible within Docker network
+    environment:
+      - NODE_ENV=production
+      - DATABASE_CLIENT=sqlite
+      - DATABASE_FILENAME=.tmp/data.db
+      - JWT_SECRET=your-jwt-secret-here
+      - ADMIN_JWT_SECRET=your-admin-jwt-secret-here
+      - APP_KEYS=key1,key2,key3,key4
+      - API_TOKEN_SALT=your-api-token-salt
+    volumes:
+      - strapi-data:/app/.tmp
+      - strapi-uploads:/app/public/uploads
+      - ./logs/strapi:/app/logs
+    restart: unless-stopped
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7200/_health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  internal:
+    driver: bridge
+
+volumes:
+  strapi-data:
+    driver: local
+  strapi-uploads:
+    driver: local

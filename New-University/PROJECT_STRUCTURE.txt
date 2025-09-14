@@ -1,0 +1,42 @@
+# eCloudWorx University - Internet Deployment Solution
+# Created: September 13, 2025
+
+## Project Structure After Deployment
+
+ecloudworx-university/
+├── src/
+│   ├── UniversityLanding.jsx          # (modify STRAPI URL)
+│   └── ...
+├── nginx-reverse-proxy.conf           # Nginx configuration
+├── docker-compose.yml                 # Main deployment file
+├── Dockerfile-nginx                   # Frontend + Nginx build
+├── deploy.sh                         # Automated deployment script
+├── .env.production                   # Production environment
+├── README-deployment.md              # Quick start guide
+├── internet-exposure-solution.md     # Complete solution guide
+└── logs/                            # Log directories
+    ├── nginx/
+    └── strapi/
+
+## Quick Start
+
+1. Extract all files to your eCloudWorx University project directory
+2. Make deploy script executable: chmod +x deploy.sh  
+3. Run deployment: ./deploy.sh
+4. Access your app at: http://your-server-ip/
+
+## Security Features
+
+✅ Only port 80 exposed to internet
+✅ Strapi backend remains internal (secure)
+✅ Nginx reverse proxy handles all external requests
+✅ No CORS issues (same origin)
+✅ Production-ready configuration
+
+## Support
+
+- Check logs: docker-compose logs -f
+- Health check: curl http://localhost/health  
+- API test: curl http://localhost/api/articles
+
+Your eCloudWorx University is ready for secure internet deployment! 🚀

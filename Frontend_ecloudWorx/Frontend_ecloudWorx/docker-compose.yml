@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  univ-frontend:
+    build: .
+    image: ecloud-univ:local
+    ports:
+      - "4000:8080" # host:container
+    environment:
+      - UNIVERSITY_URL=https://university.localtest.com
+      - PORT=8080
+    restart: unless-stopped
