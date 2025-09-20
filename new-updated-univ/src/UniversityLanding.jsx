@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 /* Enhanced animations CSS injection */
 const __eclw_enhanced_styles = `
@@ -187,7 +187,7 @@ function ErrorMessage({ message, onRetry }) {
 
 // Enhanced Article Card
 function KnowledgeBaseCard({ article, onRead, showStats = true, index = 0 }) {
-  const readTime = Math.ceil((article.Content?.length || 0) / 200) || 15;
+  const readTime = Math.ceil((article.ContentLength || article.Content?.length || 1000) / 200) || 15;
   const views = Math.floor(Math.random() * 5000) + 1000;
 
   return (
@@ -268,7 +268,7 @@ function KnowledgeBaseCard({ article, onRead, showStats = true, index = 0 }) {
 
 // Enhanced Featured Hero Card
 function FeaturedHeroCard({ article, onRead }) {
-  const readTime = Math.ceil((article.Content?.length || 0) / 200) || 15;
+  const readTime = Math.ceil((article.ContentLength || article.Content?.length || 1000) / 200) || 15;
   const views = Math.floor(Math.random() * 5000) + 2000;
 
   return (
@@ -529,22 +529,78 @@ export default function UniversityLanding() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${STRAPI}/articles?pagination[page]=1&pagination[pageSize]=50`);
+      const res = await fetch(`${STRAPI}/kb-articles?populate=*`);
       if (!res.ok) throw new Error(`Articles fetch failed: ${res.status}`);
       const json = await res.json();
       const raw = json.data || json || [];
-      const mapped = raw.map((it) => {
-        const item = it.attributes ? { id: it.id, ...it.attributes } : it;
+      const mapped = raw.map((article) => {
+        // Extract title from Title block (rich text)
+        const titleText = article.Title?.[0]?.children?.[0]?.text || "Untitled Article";
+
+        // Extract categories for Technology field
+        const technology = article.categories?.[0]?.name || "";
+
+        // Generate summary from content blocks
+        let summary = "";
+        if (article.content && Array.isArray(article.content)) {
+          for (const block of article.content) {
+            if (block.__component === "shared.text-block" && block.body) {
+              // Extract text from rich text body
+              const textContent = block.body
+                .map(p => p.children?.map(c => c.text).join('') || '')
+                .join(' ')
+                .replace(/#+/g, '') // Remove markdown headers
+                .trim();
+              if (textContent && textContent.length > 10) {
+                summary = textContent.slice(0, 200) + "...";
+                break;
+              }
+            }
+            if (block.__component === "shared.section-block" && block.section) {
+              // Extract text from section block
+              const sectionText = block.section
+                .map(p => p.children?.map(c => c.text).join('') || '')
+                .join(' ')
+                .replace(/<[^>]*>/g, '') // Remove HTML tags
+                .replace(/#+/g, '') // Remove markdown headers
+                .trim();
+              if (sectionText && sectionText.length > 10) {
+                summary = sectionText.slice(0, 200) + "...";
+                break;
+              }
+            }
+          }
+        }
+
+        // Generate content preview for reading time calculation
+        let contentLength = 0;
+        if (article.content && Array.isArray(article.content)) {
+          article.content.forEach(block => {
+            if (block.__component === "shared.text-block" && block.body) {
+              contentLength += block.body.map(p => p.children?.map(c => c.text).join('') || '').join(' ').length;
+            }
+            if (block.__component === "shared.section-block" && block.section) {
+              contentLength += block.section.map(p => p.children?.map(c => c.text).join('') || '').join(' ').length;
+            }
+            if (block.__component === "shared.code-block" && block.code) {
+              contentLength += block.code.length;
+            }
+          });
+        }
+
         return {
-          id: it.id ?? item.id,
-          Title: item.Title ?? item.title ?? "",
-          Slug: item.Slug ?? item.slug ?? item.Slug ?? "",
-          Summary: item.Summary ?? item.summary ?? (item.Content ? String(item.Content).slice(0, 200) : ""),
-          Content: item.Content ?? item.content ?? "",
-          Technology: item.Technology ?? item.technology ?? "",
-          PublishedDate: item.PublishedDate ?? item.publishedAt ?? "",
-          Published: item.Published ?? item.published ?? true,
-          Categories: item.category || item.Categories || item.categories || null,
+          id: article.id,
+          documentId: article.documentId,
+          Title: titleText,
+          Slug: article.documentId, // Using documentId as slug since no explicit slug field
+          Summary: summary || "Explore this comprehensive guide covering cloud architecture best practices and implementation strategies.",
+          Content: article.content || [],
+          ContentLength: contentLength,
+          Technology: technology,
+          PublishedDate: article.publishedAt || article.createdAt,
+          Published: article.publishedAt ? true : false,
+          Categories: article.categories || [],
+          Authors: article.authors || [],
         };
       });
 
@@ -607,21 +663,29 @@ export default function UniversityLanding() {
     setCurrentArticle(null);
 
     try {
-      const res = await fetch(`${STRAPI}/articles?filters[Slug][$eq]=${encodeURIComponent(slug)}&pagination[pageSize]=1`);
+      const res = await fetch(`${STRAPI}/kb-articles?filters[documentId][$eq]=${encodeURIComponent(slug)}&populate=*`);
       if (!res.ok) throw new Error(`Article fetch failed: ${res.status}`);
       const json = await res.json();
       const raw = (json.data && json.data[0]) ? json.data[0] : (json[0] || null);
       if (!raw) throw new Error("Article not found");
 
-      const item = raw.attributes ? { id: raw.id, ...raw.attributes } : raw;
+      // Extract title from Title block (rich text)
+      const titleText = raw.Title?.[0]?.children?.[0]?.text || "Untitled Article";
+
+      // Extract categories for Technology field
+      const technology = raw.categories?.[0]?.name || "";
+
       const mapped = {
-        id: raw.id ?? item.id,
-        Title: item.Title ?? item.title ?? "",
-        Slug: item.Slug ?? item.slug ?? "",
-        Content: item.Content ?? item.content ?? "",
-        Summary: item.Summary ?? item.summary ?? "",
-        Technology: item.Technology ?? item.technology ?? "",
-        PublishedDate: item.PublishedDate ?? item.publishedAt ?? "",
+        id: raw.id,
+        documentId: raw.documentId,
+        Title: titleText,
+        Slug: raw.documentId,
+        Content: raw.content || [],
+        Summary: raw.Summary || "",
+        Technology: technology,
+        PublishedDate: raw.publishedAt || raw.createdAt,
+        Authors: raw.authors || [],
+        Categories: raw.categories || [],
       };
       setCurrentArticle(mapped);
     } catch (err) {
@@ -651,8 +715,171 @@ export default function UniversityLanding() {
   }
 
   const processContentForDisplay = (content) => {
-    if (!content) return "";
-    return String(content).replace(/\n/g, '<br/>');
+    if (!content || !Array.isArray(content)) return "";
+
+    let html = '';
+
+    content.forEach((block, index) => {
+      switch (block.__component) {
+        case 'shared.text-block':
+          if (block.body && Array.isArray(block.body)) {
+            block.body.forEach(paragraph => {
+              if (paragraph.children) {
+                const text = paragraph.children.map(child => child.text || '').join('');
+                if (text.trim()) {
+                  // Check if it's a header (starts with # characters)
+                  if (text.startsWith('#')) {
+                    const headerLevel = (text.match(/^#+/) || [''])[0].length;
+                    const headerText = text.replace(/^#+\s*/, '');
+                    html += `<h${Math.min(headerLevel, 6)} class="text-${4-Math.min(headerLevel-1, 2)}xl font-bold text-gray-900 mt-8 mb-4">${headerText}</h${Math.min(headerLevel, 6)}>`;
+                  } else {
+                    html += `<p class="mb-4 text-gray-700 leading-relaxed">${text}</p>`;
+                  }
+                }
+              }
+            });
+          }
+          break;
+
+        case 'shared.section-block':
+          if (block.section && Array.isArray(block.section)) {
+            block.section.forEach(paragraph => {
+              if (paragraph.children) {
+                const text = paragraph.children.map(child => child.text || '').join('');
+                if (text.trim()) {
+                  // Remove HTML tags and convert to proper formatting
+                  const cleanText = text
+                    .replace(/<h2>/g, '').replace(/<\/h2>/g, '')
+                    .replace(/<p>/g, '').replace(/<\/p>/g, '')
+                    .replace(/<ul>/g, '').replace(/<\/ul>/g, '')
+                    .replace(/<li>/g, '• ').replace(/<\/li>/g, '')
+                    .replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+
+                  if (cleanText.startsWith('## ')) {
+                    const headerText = cleanText.replace(/^## /, '');
+                    html += `<h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">${headerText}</h2>`;
+                  } else if (cleanText.startsWith('• ')) {
+                    html += `<li class="ml-4 mb-2 text-gray-700">${cleanText.replace(/^• /, '')}</li>`;
+                  } else if (cleanText.trim()) {
+                    html += `<p class="mb-4 text-gray-700 leading-relaxed">${cleanText}</p>`;
+                  }
+                }
+              }
+            });
+          }
+          break;
+
+        case 'shared.code-block':
+          if (block.code) {
+            const language = block.language || 'bash';
+            // FIXED: Clean HTML tags from code content and use light theme for readability
+            let cleanCode = block.code
+              .replace(/<h3>.*?<\/h3>/gi, '')  // Remove h3 tags
+              .replace(/<pre><code>/gi, '')     // Remove pre/code opening tags
+              .replace(/<\/code><\/pre>/gi, '') // Remove pre/code closing tags
+              .replace(/<[^>]*>/g, '')          // Remove any remaining HTML tags
+              .replace(/&lt;/g, '<')            // Decode HTML entities
+              .replace(/&gt;/g, '>')
+              .replace(/&amp;/g, '&')
+              .trim();
+
+            html += `
+              <div class="my-6">
+                ${block.caption ? `<p class="text-sm text-gray-700 mb-3 font-medium">${block.caption}</p>` : ''}
+                <div class="bg-gray-100 rounded-lg overflow-hidden border border-gray-300">
+                  <div class="flex items-center justify-between px-4 py-2 bg-gray-200 border-b border-gray-300">
+                    <span class="text-xs text-gray-700 font-mono">${language}</span>
+                    <button 
+                      onclick="navigator.clipboard.writeText(\`${cleanCode.replace(/\`/g, '\\`')}\`)"
+                      class="text-xs text-gray-700 hover:text-gray-900 transition-colors px-2 py-1 rounded hover:bg-gray-300"
+                      title="Copy code"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                  <pre class="p-4 overflow-x-auto text-sm text-gray-800"><code class="language-${language}">${cleanCode}</code></pre>
+                </div>
+              </div>
+            `;
+          }
+          break;
+
+        case 'shared.callout-block':
+          if (block.message && Array.isArray(block.message)) {
+            const messageText = block.message
+              .map(p => p.children?.map(c => c.text).join('') || '')
+              .join(' ');
+            const style = block.style || 'info';
+            const bgColor = style === 'warning' ? 'bg-yellow-50 border-yellow-200' : 
+                           style === 'error' ? 'bg-red-50 border-red-200' :
+                           'bg-blue-50 border-blue-200';
+            html += `
+              <div class="my-6 p-4 ${bgColor} border rounded-lg">
+                <p class="text-gray-700">${messageText}</p>
+              </div>
+            `;
+          }
+          break;
+
+        case 'shared.video-block':
+          if (block.url) {
+            html += `
+              <div class="my-6">
+                ${block.caption ? `<p class="text-sm text-gray-600 mb-2">${block.caption}</p>` : ''}
+                <div class="aspect-video">
+                  <iframe 
+                    src="${block.url.replace('watch?v=', 'embed/')}" 
+                    class="w-full h-full rounded-lg"
+                    frameborder="0" 
+                    allowfullscreen>
+                  </iframe>
+                </div>
+              </div>
+            `;
+          }
+          break;
+
+        case 'shared.image-block':
+          // FIXED: Handle both old structure (block.image.url) and new structure (block.url)
+          const imageUrl = block.url || (block.image && block.image.url);
+
+          if (imageUrl) {
+            const fullImageUrl = imageUrl.startsWith('http') ? imageUrl : STRAPI + imageUrl;
+            html += `
+              <div class="my-6">
+                <img 
+                  src="${fullImageUrl}" 
+                  alt="${block.alt || (block.image && block.image.alternativeText) || 'Article image'}"
+                  class="w-full h-auto rounded-lg shadow-md"
+                  onError="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMjAgMTUwTDE2MCAyMDBMMjQwIDEyMEwyODAgMTgwSDE2MFoiIGZpbGw9IiNEMUQ1REIiLz4KPGNpcmNsZSBjeD0iMTQwIiBjeT0iMTEwIiByPSIyMCIgZmlsbD0iI0QxRDVEQiIvPgo8dGV4dCB4PSIyMDAiIHk9IjI2MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjOUI5Q0E0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5JbWFnZSBub3QgZm91bmQ8L3RleHQ+Cjwvc3ZnPgo='; this.parentElement.classList.add('bg-gray-50', 'flex', 'items-center', 'justify-center', 'min-h-48');"
+                />
+                ${block.caption ? `<p class="text-sm text-gray-600 italic text-center mt-2">${block.caption}</p>` : ''}
+              </div>
+            `;
+          } else if (block.alt || block.caption) {
+            // Fallback for when image data is not available
+            html += `
+              <div class="my-6 text-center p-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                <div class="text-gray-400 mb-3">
+                  <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                ${block.caption ? `<p class="text-sm text-gray-600 italic font-medium">${block.caption}</p>` : ''}
+                ${block.alt ? `<p class="text-xs text-gray-500 mt-1">${block.alt}</p>` : ''}
+              </div>
+            `;
+          }
+          break;
+
+        default:
+          // Handle any other block types
+          console.log('Unknown block type:', block.__component);
+          break;
+      }
+    });
+
+    return html;
   };
 
   return (
@@ -993,7 +1220,7 @@ export default function UniversityLanding() {
       {/* Enhanced Reader Modal */}
       {readerOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 eclw-fade-in" onClick={overlayClick}>
-          <div className="eclw-modal bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+          <div className="eclw-modal bg-white rounded-2xl shadow-2xl max-w-screen-xl lg:max-w-screen-2xl w-full max-h-[90vh] overflow-hidden">
             {/* Enhanced Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
               <div className="flex items-center space-x-3">
